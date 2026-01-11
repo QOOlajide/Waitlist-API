@@ -4,6 +4,15 @@ from app.service import add_to_waitlist
 
 router = APIRouter()
 
+@router.get("/")
+def root():
+    return {
+        "name": "Waitlist API",
+        "status": "ok",
+        "docs": "/docs",
+        "health": "/health",
+    }
+
 @router.get("/health")
 def health():
     return {"status": "ok"}
