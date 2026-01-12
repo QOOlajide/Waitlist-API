@@ -25,14 +25,15 @@ Choose ONE of these service types:
 - **Docker** (recommended for this repo since it includes a `Dockerfile`)
   - **Environment**: Docker
   - Render will build from `Dockerfile`
+  - **Migrations**: the container runs `alembic upgrade head` on startup (creates/updates tables)
 - **Python** (works too, but uses Render’s native build/runtime)
   - **Environment**: Python
   - **Build Command**: `pip install -r requirements.txt`
-  - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+  - **Start Command**: `alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT`
 
 ### 3) Set required environment variables
 
-This app *requires* `DATABASE_URL` at startup (see `app/db.py`).
+This app requires `DATABASE_URL` for database access and migrations (see `app/db.py`).
 
 In your Render **Web Service** → **Environment**:
 
@@ -72,6 +73,7 @@ Locally, `.env` is **not loaded automatically** by this app right now. Use:
 
 ```powershell
 $env:DATABASE_URL="postgresql://..."
+alembic upgrade head
 uvicorn app.main:app --reload
 ```
 

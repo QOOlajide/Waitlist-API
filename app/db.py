@@ -1,24 +1,50 @@
+from __future__ import annotations
+
 import os
+from functools import lru_cache
+from typing import Generator
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.engine import Engine
+from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
-# Render will provide this as an env var you set on the service
-DATABASE_URL = os.getenv("DATABASE_URL")
 
-if not DATABASE_URL:
-    raise RuntimeError("DATABASE_URL is not set. Add it in Render Environment Variables.")
+def normalize_database_url(url: str) -> str:
+    """
+    Ensure SQLAlchemy uses psycopg v3 instead of defaulting to psycopg2.
 
-# SQLAlchemy defaults Postgres to the psycopg2 driver if no driver is specified.
-# This project uses psycopg v3 (installed via `psycopg[binary]`), so normalize URLs like:
-# - postgres://...            -> postgresql+psycopg://...
-# - postgresql://...          -> postgresql+psycopg://...
-if DATABASE_URL.startswith("postgres://"):
-    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql+psycopg://", 1)
-elif DATABASE_URL.startswith("postgresql://") and "+psycopg" not in DATABASE_URL.split("://", 1)[0]:
-    DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
+    - postgres://...      -> postgresql+psycopg://...
+    - postgresql://...    -> postgresql+psycopg://...
+    """
+    if url.startswith("postgres://"):
+        return url.replace("postgres://", "postgresql+psycopg://", 1)
+    if url.startswith("postgresql://") and "+psycopg" not in url.split("://", 1)[0]:
+        return url.replace("postgresql://", "postgresql+psycopg://", 1)
+    return url
 
-# SQLAlchemy engine + session factory
-engine = create_engine(DATABASE_URL, pool_pre_ping=True)
-SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
+
+def get_database_url() -> str:
+    url = os.getenv("DATABASE_URL")
+    if not url:
+        raise RuntimeError("DATABASE_URL is not set. Add it in your environment variables.")
+    return normalize_database_url(url)
+
+
+@lru_cache
+def get_engine() -> Engine:
+    return create_engine(get_database_url(), pool_pre_ping=True)
+
 
 Base = declarative_base()
+
+
+def _get_sessionmaker() -> sessionmaker:
+    return sessionmaker(bind=get_engine(), autoflush=False, autocommit=False)
+
+
+def get_db() -> Generator[Session, None, None]:
+    db = _get_sessionmaker()()
+    try:
+        yield db
+    finally:
+        db.close()

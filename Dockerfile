@@ -21,5 +21,5 @@ EXPOSE 8080
 
 # 8) Start the FastAPI app with uvicorn
 # IMPORTANT: host 0.0.0.0 is required for Docker
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
 

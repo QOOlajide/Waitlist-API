@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, EmailStr, Field
 
 class WaitlistIn(BaseModel):
@@ -8,4 +10,4 @@ class WaitlistOut(BaseModel):
     id: int
     email: EmailStr
     source: str | None
-    created_at: str
+    created_at: datetime
