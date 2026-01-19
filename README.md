@@ -33,6 +33,10 @@ For a comprehensive overview of all endpoints, request/response schemas, and the
   - `postgresql://user:pass@host:5432/db`
   - `postgres://user:pass@host:5432/db`
 
+- **`ALLOWED_ORIGINS`** (optional): Comma-separated list of allowed CORS origins  
+  - Defaults to `*` (all origins allowed)
+  - Example: `https://myapp.com,https://staging.myapp.com`
+
 ### Run locally
 
 ```powershell
