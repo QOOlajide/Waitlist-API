@@ -37,6 +37,18 @@ For a comprehensive overview of all endpoints, request/response schemas, and the
   - Defaults to `*` (all origins allowed)
   - Example: `https://myapp.com,https://staging.myapp.com`
 
+- **`RESEND_API_KEY`** (optional): [Resend](https://resend.com) API key for sending welcome emails  
+  - If not set, emails are skipped (logged as warning)
+  - Get your key at [resend.com/api-keys](https://resend.com/api-keys)
+
+- **`EMAIL_FROM`** (optional): Sender address for welcome emails  
+  - Defaults to `Waitlist <onboarding@resend.dev>`
+  - For production, use your verified domain: `Waitlist <hello@yourdomain.com>`
+
+- **`DAILY_EMAIL_LIMIT`** (optional): Max emails per day  
+  - Defaults to `300`
+  - Protects against runaway costs
+
 ### Run locally
 
 ```powershell

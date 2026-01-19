@@ -6,3 +6,5 @@ email-validator==2.2.0
 SQLAlchemy==2.0.32
 psycopg[binary]==3.2.1
 alembic==1.13.2
+
+resend==2.5.0
