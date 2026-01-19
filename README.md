@@ -8,6 +8,14 @@ Production-minded waitlist backend for collecting sign-ups (email + optional sou
 - Prevent duplicate emails (DB-enforced, case-insensitive)
 - Provide a simple backend your main app can call (mobile/web/landing page)
 
+### Interactive API Documentation
+
+For a comprehensive overview of all endpoints, request/response schemas, and the ability to **test endpoints directly in your browser**, visit the Swagger UI:
+
+**🔗 [https://waitlist-api-j29t.onrender.com/docs](https://waitlist-api-j29t.onrender.com/docs)**
+
+> **Note:** The base URL (`https://waitlist-api-j29t.onrender.com`) returns minimal service info. Append `/docs` to access the full interactive documentation.
+
 ### API endpoints
 
 - **GET `/`**: basic service info
