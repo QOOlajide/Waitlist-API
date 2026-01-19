@@ -25,6 +25,7 @@ For a comprehensive overview of all endpoints, request/response schemas, and the
   - **201**: created
   - **409**: email already on the waitlist
   - **422**: invalid input
+- **GET `/admin/export?key=YOUR_KEY`**: download all signups as CSV (requires `ADMIN_API_KEY`)
 
 ### Environment variables
 
@@ -48,6 +49,10 @@ For a comprehensive overview of all endpoints, request/response schemas, and the
 - **`DAILY_EMAIL_LIMIT`** (optional): Max emails per day  
   - Defaults to `300`
   - Protects against runaway costs
+
+- **`ADMIN_API_KEY`** (optional): Secret key for admin endpoints (CSV export)  
+  - Required for `/admin/export` endpoint
+  - Generate a secure random string (e.g., `openssl rand -hex 32`)
 
 ### Run locally
 
