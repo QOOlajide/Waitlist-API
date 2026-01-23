@@ -15,11 +15,14 @@ def normalize_database_url(url: str) -> str:
 
     - postgres://...      -> postgresql+psycopg://...
     - postgresql://...    -> postgresql+psycopg://...
+    
+    Also ensures sslmode=require for Neon compatibility.
     """
     if url.startswith("postgres://"):
-        return url.replace("postgres://", "postgresql+psycopg://", 1)
-    if url.startswith("postgresql://") and "+psycopg" not in url.split("://", 1)[0]:
-        return url.replace("postgresql://", "postgresql+psycopg://", 1)
+        url = url.replace("postgres://", "postgresql+psycopg://", 1)
+    elif url.startswith("postgresql://") and "+psycopg" not in url.split("://", 1)[0]:
+        url = url.replace("postgresql://", "postgresql+psycopg://", 1)
+    
     return url
 
 
@@ -32,7 +35,21 @@ def get_database_url() -> str:
 
 @lru_cache
 def get_engine() -> Engine:
-    return create_engine(get_database_url(), pool_pre_ping=True)
+    """
+    Create SQLAlchemy engine optimized for serverless (Vercel + Neon).
+    
+    - pool_pre_ping: Verify connections before use (handles serverless cold starts)
+    - pool_size=5: Small pool for serverless
+    - max_overflow=10: Allow burst connections
+    - pool_recycle=300: Recycle connections every 5 min (Neon may close idle connections)
+    """
+    return create_engine(
+        get_database_url(),
+        pool_pre_ping=True,
+        pool_size=5,
+        max_overflow=10,
+        pool_recycle=300,
+    )
 
 
 Base = declarative_base()

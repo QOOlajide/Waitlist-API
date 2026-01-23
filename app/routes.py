@@ -55,8 +55,8 @@ def join_waitlist(
 ):
     result = add_to_waitlist(db, payload)
 
-    # Queue welcome email (non-blocking)
-    background_tasks.add_task(send_welcome_email, result["email"])
+    # Queue personalized welcome email (non-blocking)
+    background_tasks.add_task(send_welcome_email, result["email"], result["first_name"])
 
     return result
 
@@ -79,13 +79,16 @@ def export_waitlist_csv(
     writer = csv.writer(output)
     
     # Header row
-    writer.writerow(["id", "email", "source", "created_at"])
+    writer.writerow(["id", "first_name", "last_name", "email", "phone", "source", "created_at"])
     
     # Data rows
     for entry in entries:
         writer.writerow([
             entry.id,
+            entry.first_name,
+            entry.last_name,
             entry.email,
+            entry.phone,
             entry.source or "",
             entry.created_at.isoformat() if entry.created_at else "",
         ])
