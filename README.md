@@ -14,7 +14,7 @@ Production-minded waitlist backend for collecting sign-ups (name, email, Nigeria
 
 For a comprehensive overview of all endpoints, request/response schemas, and the ability to **test endpoints directly in your browser**, visit the Swagger UI:
 
-**🔗 [(https://waitlist-api-kh5c.vercel.app/docs)](https://your-app.vercel.app/docs)**
+**🔗https://waitlist-api-kh5c.vercel.app/docs**
 
 > **Note:** Append `/docs` to your deployed URL to access the full interactive documentation.
 
