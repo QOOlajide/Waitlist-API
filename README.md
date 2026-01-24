@@ -1,6 +1,6 @@
 ## Waitlist API (FastAPI + PostgreSQL)
 
-Production-minded waitlist backend for collecting sign-ups (name, email, Nigerian phone number), preventing duplicates, sending automated welcome emails, and storing entries in Postgres.
+Production-minded waitlist backend for collecting sign-ups (name, email, Nigerian phone number, source of entry), preventing duplicates, sending automated welcome emails, and storing entries in Postgres.
 
 ### What this is for
 
