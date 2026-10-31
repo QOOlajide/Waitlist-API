@@ -1,6 +1,12 @@
 # 1) Base image: lightweight Python runtime
 FROM python:3.11-slim
 
+# Install latest CA certificates
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates \
+    && update-ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+    
 # 2) Make container logs appear immediately (useful in deployment)
 ENV PYTHONUNBUFFERED=1
 
